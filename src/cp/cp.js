@@ -1,6 +1,20 @@
+import { spawn } from 'node:child_process';
+import { join } from 'node:path';
+
 const spawnChildProcess = async (args) => {
-  // Write your code here
+  const scriptPath = join('files', 'script.js');
+
+  const child = spawn('node', [scriptPath, ...args], {
+    stdio: ['inherit', 'inherit', 'inherit'],
+  });
+
+  child.on('close', (code) => {
+    console.log(`Child process exited with code ${code}`);
+  });
+  child.on('error', (err) => {
+    console.error('Failed to start child process:', err);
+  });
 };
 
 // Put your arguments in function call to test this functionality
-spawnChildProcess( /* [someArgument1, someArgument2, ...] */);
+spawnChildProcess(['arg1', 'arg2']);
